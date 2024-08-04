@@ -6,8 +6,16 @@ ThisBuild / organizationName := "example"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val root = (project in file("."))
+  .dependsOn(scalafixRules % ScalafixConfig)
   .settings(
     name := "FixTest"
   )
 
-// See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
+lazy val scalafixRules = (project in file("scalafix/rules"))
+  .disablePlugins(ScalafixPlugin)
+  .settings(
+    libraryDependencies +=
+      "ch.epfl.scala" %%
+        "scalafix-core" %
+        _root_.scalafix.sbt.BuildInfo.scalafixVersion
+  )
